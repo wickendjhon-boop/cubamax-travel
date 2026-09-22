@@ -1,3 +1,11 @@
 {
-  "productos": []
+  "productos": [
+    {
+      "id": 1,
+      "nombre": "Nombre del Producto",
+      "precio": 25,
+      "imagen": "images/producto1.jpg",
+      "descripcion": "Descripción corta del producto"
+    }
+  ]
 }
