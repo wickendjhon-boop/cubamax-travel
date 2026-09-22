@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cubamax Travel - ¡Uniendo a la familia cubana!</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #f5f9f7; color: #1a3a2e; }
+  header { background: linear-gradient(135deg, #2e8b7a 0%, #1a5c4f 100%); color: white; padding: 30px 20px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+  header img { max-width: 180px; margin-bottom: 10px; }
+  header h1 { font-size: 2.2em; letter-spacing: 2px; margin-bottom: 8px; }
+  header p { font-size: 1.1em; opacity: 0.95; margin-bottom: 4px; }
+  header .envios { display: inline-block; background: rgba(255,255,255,0.2); padding: 6px 16px; border-radius: 20px; margin-top: 10px; font-size: 0.95em; }
+  .container { max-width: 1200px; margin: 0 auto; padding: 40px 20px; }
+  .titulo-seccion { text-align: center; font-size: 1.8em; color: #1a5c4f; margin-bottom: 30px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 25px; }
+  .producto { background: white; border-radius: 15px; overflow: hidden; box-shadow: 0 4px 15px rgba(46,139,122,0.15); transition: transform 0.3s, box-shadow 0.3s; display: flex; flex-direction: column; }
+  .producto:hover { transform: translateY(-5px); box-shadow: 0 8px 25px rgba(46,139,122,0.3); }
+  .producto img { width: 100%; height: 220px; object-fit: cover; background: #e8f5f1; }
+  .producto-info { padding: 18px; flex-grow: 1; display: flex; flex-direction: column; }
+  .producto h3 { color: #1a5c4f; font-size: 1.2em; margin-bottom: 8px; }
+  .producto .desc { color: #666; font-size: 0.9em; margin-bottom: 12px; flex-grow: 1; }
+  .producto .precio { font-size: 1.4em; font-weight: bold; color: #2e8b7a; margin-bottom: 12px; }
+  .btn-whatsapp { display: block; background: #25D366; color: white; text-align: center; padding: 12px; border-radius: 10px; text-decoration: none; font-weight: bold; transition: background 0.3s; }
+  .btn-whatsapp:hover { background: #1da851; }
+  footer { background: #1a5c4f; color: white; text-align: center; padding: 25px 20px; margin-top: 40px; }
+  footer a { color: #7fd4c1; text-decoration: none; }
+  .vacio { text-align: center; padding: 60px 20px; color: #888; font-size: 1.1em; }
+</style>
+</head>
+<body>
+<header>
+  <img src="/images/logo.png" alt="Cubamax Travel">
+  <h1>CUBAMAX TRAVEL</h1>
+  <p>¡Uniendo a la familia cubana!</p>
+  <span class="envios">📦 Envíos a todas las provincias de Cuba 🇨🇺</span>
+</header>
+<div class="container">
+  <h2 class="titulo-seccion">Nuestros Productos</h2>
+  <div class="grid" id="productos"></div>
+</div>
+<footer>
+  <p>© 2026 Cubamax Travel - ¡Uniendo a la familia cubana!</p>
+  <p style="margin-top:8px;">WhatsApp: <a href="https://wa.me/15742213993">+1 (574) 221-3993</a></p>
+</footer>
+<script>
+const WHATSAPP = "15742213993";
+fetch('/productos/productos.json')
+  .then(r => r.json())
+  .then(data => {
+    const cont = document.getElementById('productos');
+    const lista = data.productos || [];
+    if (lista.length === 0) {
+      cont.innerHTML = '<div class="vacio">Aún no hay productos. Entra al panel /admin para añadir.</div>';
+      return;
+    }
+    cont.innerHTML = lista.map(p => {
+      const msg = encodeURIComponent(`Hola Cubamax Travel, quiero comprar: ${p.nombre} - ${p.precio}`);
+      const img = p.imagen || 'https://via.placeholder.com/400x300/2e8b7a/ffffff?text=Cubamax';
+      return `<div class="producto"><img src="${img}" alt="${p.nombre}"><div class="producto-info"><h3>${p.nombre}</h3><p class="desc">${p.descripcion || ''}</p><p class="precio">${p.precio}</p><a class="btn-whatsapp" target="_blank" href="https://wa.me/${WHATSAPP}?text=${msg}">💬 Comprar por WhatsApp</a></div></div>`;
+    }).join('');
+  })
+  .catch(() => {
+    document.getElementById('productos').innerHTML = '<div class="vacio">Error cargando productos.</div>';
+  });
+</script>
+</body>
+  </html>
